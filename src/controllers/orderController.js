@@ -184,6 +184,14 @@ const updateStatus = async (req, res) => {
 const destroy = async (req, res) => {
   try {
     const { id } = req.params;
+    const existing = await model.getById(id);
+
+    if (!existing) {
+      return res.status(404).json({
+        status: false,
+        message: "Order tidak ditemukan",
+      });
+    }
 
     await model.delete(id);
 
