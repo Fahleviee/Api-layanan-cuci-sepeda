@@ -109,6 +109,14 @@ const update = async (req, res) => {
     const { id } = req.params;
     const { namaLayanan, harga, estimasiWaktu } = req.body;
     const existing = await model.getByNama(namaLayanan);
+    const exisitingid = await model.getById(id)
+    
+    if (!exisitingid){
+      return res.status(404).json({
+        status: false,
+        message: "Service tidak ditemukan",
+      });
+    }
 
     if (existing && existing.id != id) {
       return res.status(400).json({
@@ -116,14 +124,6 @@ const update = async (req, res) => {
         message: "Nama layanan sudah digunakan",
       });
     }
-    if (!id || isNaN(id)) {
-      return res.status(400).json({
-        status: false,
-        message: "ID service tidak valid",
-      });
-    }
-
-
 
     const data = await model.update(id, {
       namaLayanan,
@@ -148,6 +148,14 @@ const update = async (req, res) => {
 const remove = async (req, res) => {
   try {
     const { id } = req.params;
+    const exisitingid = await model.getById(id)
+    
+    if (!exisitingid){
+      return res.status(404).json({
+        status: false,
+        message: "ID Service tidak ditemukan",
+      });
+    }
 
     if (!id || isNaN(id)) {
       return res.status(400).json({

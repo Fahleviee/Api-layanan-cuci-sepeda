@@ -18,7 +18,7 @@ model Customer {
 
 model Service {
   id            Int    @id @default(autoincrement())
-  namaLayanan   String
+  namaLayanan   String @unique
   harga         Int
   estimasiWaktu String
 

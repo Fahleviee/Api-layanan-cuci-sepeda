@@ -2,17 +2,12 @@ import model from "../models/orderModel.js";
 import validator from "../validators/validator.js";
 import { orderValidationSchema } from "../validators/orderValidator.js";
 import serviceModel from "../models/serviceModel.js";
+import customerModel from "../models/customerModel.js";
 
 const getAll = async (req, res) => {
   try {
     const data = await model.getAll();
 
-    if (!existing) {
-      return res.status(404).json({
-        status: false,
-        message: "Data tidak ditemukan",
-      });
-    }
     return res.status(200).json({
       status: true,
       message: "Data order berhasil diambil",
@@ -30,7 +25,6 @@ const getAll = async (req, res) => {
 const getById = async (req, res) => {
   try {
     const { id } = req.params;
-
     const data = await model.getById(id);
 
     if (!data) {
@@ -102,6 +96,31 @@ const update = async (req, res) => {
     const { id } = req.params;
     const { customerId, serviceId, status, totalHarga } = req.body;
 
+    const existingOrder = await model.getById(id);
+
+    if (!existingOrder) {
+      return res.status(404).json({
+        status: false,
+        message: "Order tidak ditemukan",
+      });
+    }
+
+    const existingCustomer = await customerModel.getById(customerId);
+    if (!existingCustomer) {
+      return res.status(404).json({
+        status: false,
+        message: "ID Customer tidak ditemukan",
+      });
+    }
+
+    const existingService = await serviceModel.getById(serviceId);
+    if (!existingService) {
+      return res.status(404).json({
+        status: false,
+        message: "ID Service tidak ditemukan",
+      });
+    }
+
     const data = await model.update(id, {
       customerId: Number(customerId),
       serviceId: Number(serviceId),
@@ -114,6 +133,7 @@ const update = async (req, res) => {
       message: "Order berhasil diupdate",
       data,
     });
+
   } catch (error) {
     return res.status(500).json({
       status: false,
