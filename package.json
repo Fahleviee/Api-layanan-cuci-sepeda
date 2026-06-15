@@ -1,0 +1,23 @@
+{
+  "name": "layanan-cuci-sepeda",
+  "version": "1.0.0",
+  "description": "Sistem layanan cuci sepeda CRUD dengan Express dan Prisma",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
+    "prisma": "prisma"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "dotenv": "^17.4.2",
+    "express": "^4.19.2",
+    "joi": "^18.2.1",
+    "mysql2": "^3.11.0",
+    "prisma": "^5.22.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

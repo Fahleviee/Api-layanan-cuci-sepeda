@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id     Int    @id @default(autoincrement())
+  nama   String
+  noHp   String @unique
+  alamat String
+
+  orders Order[]
+}
+
+model Service {
+  id            Int    @id @default(autoincrement())
+  namaLayanan   String
+  harga         Int
+  estimasiWaktu String
+
+  orders Order[]
+}
+
+model Order {
+  id          Int @id @default(autoincrement())
+  customerId  Int
+  serviceId   Int
+  tanggal     DateTime @default(now())
+  status      String @default("Proses")
+  totalHarga  Float
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  service  Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+}
